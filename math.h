@@ -40,6 +40,7 @@ float findPositiveMean(const Vector<float> &dataArray);
  */
 float findPositiveStandardDeviation(const Vector<float> &dataArray, float mean);
 float calculateSPCC(Vector<float> &vecOne, Vector<float> &vecTwo);
+float calculateMAD(Vector<float> &dataArray, float mean);
 
 
 #endif // MATH_H_INCLUDED

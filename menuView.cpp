@@ -86,7 +86,7 @@ void printMenu()
 {
     std::cout << "[1] Find wind speed average and standard deviation" << '\n';
     std::cout << "[2] Find monthly air temperature average and standard deviation in a year" << '\n';
-    std::cout << "[3] Find monthly total solar radiation (kWh/m^2) in a year" << '\n';
+    std::cout << "[3] Find the sPCC for [wind speed and air temp], [wind speed and solar radiation], [air temp and solar radiation]" << '\n';
     std::cout << "[4] Output weather data file" << '\n';
     std::cout << "[5] Exit Program" << '\n';
 }

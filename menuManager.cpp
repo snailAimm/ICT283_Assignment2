@@ -110,7 +110,7 @@ void fileFullWeatherDataOutput(Map<int, WeatherLogType> &weatherMap, int userYea
     const int totalMonths = 12;
 
     float totalSolarRadiationKiloWat = 0;
-    float speedMean = 0, speedSD = 0, temperatureMean = 0, temperatureSD = 0;
+    float speedMean = 0, speedSD = 0, speedMAD = 0,temperatureMean = 0, temperatureSD = 0, temperatureMAD = 0;
     outFile << userYear << '\n';
     for(int month  = 1; month <= totalMonths; month++)
     {
@@ -120,12 +120,14 @@ void fileFullWeatherDataOutput(Map<int, WeatherLogType> &weatherMap, int userYea
 
         speedMean = findPositiveMean(windSpeedVec);
         speedSD = findPositiveStandardDeviation(windSpeedVec, speedMean);
+        speedMAD = calculateMAD(windSpeedVec, speedMean);
 
         temperatureMean = findPositiveMean(airTempVec);
         temperatureSD = findPositiveStandardDeviation(airTempVec, temperatureMean);
+        temperatureMAD = calculateMAD(airTempVec, temperatureMean);
 
         totalSolarRadiationKiloWat = processTotalSolarRadiation(userYear, month, solarRadiationVec, weatherMap);
-        outputFullDataFile(turnMonthIntToWord(month), speedMean*3.6f, speedSD*3.6f, temperatureMean, temperatureSD, totalSolarRadiationKiloWat, outFile);
+        outputFullDataFile(turnMonthIntToWord(month), speedSD*3.6f, speedMAD*3.6f, temperatureSD, temperatureMAD , totalSolarRadiationKiloWat, outFile);
     }
     outFile.close();
     std::cout << "Output File Created " << '\n';

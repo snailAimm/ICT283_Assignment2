@@ -1,5 +1,6 @@
 #include"math.h"
 #include<cmath>
+#include<cstdlib>
 
 float findPositiveMean(const Vector<float> &dataArray){
     float mean = 0;
@@ -61,4 +62,14 @@ float calculateSPCC(Vector<float> &vecOne, Vector<float> &vecTwo)
     }
     denominator = ((vecOne.getSize() - 1) * sdOne * sdTwo);
     return numerator/denominator;
+}
+
+float calculateMAD(Vector<float> &dataArray, float mean)
+{
+    float sum = 0;
+    for(int i = 0; i < dataArray.getSize(); i++)
+    {
+        sum += abs(dataArray[i] - mean);
+    }
+    return sum/dataArray.getSize();
 }
