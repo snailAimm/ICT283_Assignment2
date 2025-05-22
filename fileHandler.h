@@ -8,23 +8,24 @@
 #include"Map.h"
 #include"fileParser.h"
 #include"fileValidation.h"
+#include"bstCollector.h"
+#include"BST.h"
 
 /**
- *@file IO.h
+ *@file fileHandler.h
  *@brief File that Contains Functions that supports Reading the data file
  *
  *
  * @author Ken Giron
  * @version 03
- * @date 18/04/2025 Ken Giron, Finished
  *
  *
  * @todo [NA]
  *
  * @bug None
  */
- //----------------------------------------------------------------------
-bool dataEngine(Map<int, WeatherLogType> &weatherMap, const Vector<std::string> &dataFiles, Vector<int> &yearVec);
+//----------------------------------------------------------------------
+bool dataEngine(Map<int, WeatherLogType> &weatherMap, const BST<std::string> &dataFiles, BST<int> &yearBST);
 /**
  * @brief Handles the Orchestration of appending into a weatherVector and reading the dataFile
  * @param weatherVec The Weather Data's Vector
@@ -35,7 +36,7 @@ bool dataEngine(Map<int, WeatherLogType> &weatherMap, const Vector<std::string> 
  *
  * @return void
  */
-bool mainDataLoader(Map<int, WeatherLogType> &weatherMap, const std::string &dataFileLocation, SensorColumnInfo &sCI, Vector<int> &yearVec);
+bool mainDataLoader(Map<int, WeatherLogType> &weatherMap, const std::string &dataFileLocation, SensorColumnInfo &sCI, BST<int> &yearBST);
 /**
  * @brief Reads the dataSource File and Returns the Data File
  * @param dataSourceLocation The location of the dataSource File
@@ -43,7 +44,7 @@ bool mainDataLoader(Map<int, WeatherLogType> &weatherMap, const std::string &dat
  *
  * @return A string that represents the location of the actual Data File
  */
-void readDataSources(const std::string &dataSourceLocation, Vector<std::string> &dataFilePaths);
+void readDataSources(const std::string &dataSourceLocation, BST<std::string> &dataFilePaths);
 /**
  * @brief Reads the SensorName File and stores it
  * @param sCI The struct where the SensorNames will be stored
@@ -107,9 +108,24 @@ int stringToInt(std::string sTR);
  * @return a float that represents the string's number
  */
 float stringToFloat(std::string sTR);
-
+/**
+ * @brief Adds a Weather Log Entry, to its Map
+ * @param entry The WeatherLogEntry (A Struct that contains all weather information)
+ * @param weatherMap the Map that takes in an int key, and WeatherLogType (Vector of WeatherLogEntry) Values
+ *
+ *
+ * @return void
+ */
 void addToMap(WeatherLogEntry &entry, Map<int, WeatherLogType> &weatherMap);
-void addToYearVec(Vector<int> &yearVec, WeatherLogEntry &entry);
+/**
+ * @brief Adds a year into the BST
+ * @param entry The WeatherLogEntry (A Struct that contains all weather information)
+ * @param yearBST the Binary Search Tree that contains all the data's years.
+ *
+ *
+ * @return void
+ */
+void addToYearBST(BST<int> &yearBST, WeatherLogEntry &entry);
 
 
 #endif // FILEHANDLER_H_INCLUDED

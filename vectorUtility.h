@@ -18,7 +18,7 @@
  *
  * @bug None
  */
- //----------------------------------------------------------------------
+//----------------------------------------------------------------------
 /**
     * @brief  Handles Entry Appending
     * @param floatVec The Vector where the entry will be appended to

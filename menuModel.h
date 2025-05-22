@@ -22,7 +22,7 @@
  *
  * @bug None
  */
- //----------------------------------------------------------------------
+//----------------------------------------------------------------------
 
 /**
  * @brief Converts the solar radiation vector (w/m^2) to (kWh/m^2)
@@ -35,11 +35,11 @@
  */
 float radiationKiloWatSum(const Vector<float> &solarRadiationVec);
 /**
- * @brief Filters weatherVec a month within a year of it's data and stores it to floatVec
+ * @brief Filters weatherMap a month within a year of it's data and stores it to floatVec
  * @param year The specific year
  * @param month The specific month
  * @param floatVec The Vector where the data will be transfered to
- * @param weatherVec Vector where the data will be from
+ * @param weatherMap The Map where the data will be from
  * @param menu Selection of which "Data" to process.
  *
  * Filters the data[See Enum] and stores it within floatVec. The Filter is
@@ -47,13 +47,13 @@ float radiationKiloWatSum(const Vector<float> &solarRadiationVec);
  *
  * @return void
  */
-void filterVecByYearMonth(int year, int month, Vector<float> &floatVec, Map<int, WeatherLogType> &weatherMap, int menu);
+void filterMapByYearMonth(int year, int month, Vector<float> &floatVec, Map<int, WeatherLogType> &weatherMap, int menu);
 /**
  * @brief Adds up all the solarRadiation after conversion and returns the total
  * @param year The specific year
  * @param month The specific month
  * @param dataVec The Vector where the data will be transfered to
- * @param weatherVec Vector where the data will be from
+ * @param weatherMap The Map where the data will be from
  *
  * First Filters the Solar Radiation, then converts it then adds it to the total.
  *
@@ -61,4 +61,18 @@ void filterVecByYearMonth(int year, int month, Vector<float> &floatVec, Map<int,
  * @return a float representing the total solar radiation within a month in (kWh/m^2)
  */
 float processTotalSolarRadiation(int year, int month, Vector<float> &dataVec, Map<int, WeatherLogType> &weatherMap);
+/**
+ * @brief Similar to filterMapByYearMonth but it also filters any values where SR is <100
+ * @param year The specific year
+ * @param month The specific month
+ * @param dataVecVec The Vector where the data will be transfered to
+ * @param weatherMap The Map where the data will be from
+ * @param menu Selection of which "Data" to process.
+ *
+ * Filters the data[See Enum] and stores it within floatVec. The Filter is
+ * one month within a year.
+ *
+ * @return void
+ */
+void sPCCDataFiltering(int year, int month, Vector<float> &dataVec, Map<int, WeatherLogType> &weatherMap, int menu);
 #endif // MENUMODEL_H_INCLUDED

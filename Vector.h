@@ -6,74 +6,82 @@
 //------------------------------------------------------------------
 
 
-	/**
-	 * @class Vector
-	 * @brief  A Temu-version of std::vector
-	 *
-	 *
-	 *
-	 * @author Ken Giron
-	 * @version 02
-	 * @date 5/4/2025 Ken Giron, Started
-	 * @date 5/18/2025 Ken Giron, Removed Clear.
-	 *
-	 * @todo Documentation
-	 *
-	 * @bug My program has no bugs.
-	 */
+/**
+ * @class Vector
+ * @brief  A Temu-version of std::vector
+ *
+ *
+ *
+ * @author Ken Giron
+ * @version 02
+ * @date 5/4/2025 Ken Giron, Started
+ * @date 5/18/2025 Ken Giron, Removed Clear.
+ *
+ * @todo Documentation
+ *
+ * @bug My program has no bugs.
+ */
 
 template <class T>
 class Vector   // This is NOT the std::vector.
 {
-	public:
-	    Vector();
-	    ~Vector();
-		/**
-		 * @brief Add Data At the end of the Array
-		 * @param data = Data being added at the end
-		 *
-		 *
-		 *
-		 * @return void
-		 */
-        void append(const T& data);
-        /**
-		 * @brief Turns [] into like a Raw Array's []
-		 * @param index = index of an array
-		 *
-		 *
-		 *
-		 * @return returns a Template Object.
-		 */
-        T& operator[](int index);
-        const  T& operator[](int index) const;
-        /**
-		 * @brief  Getter for the Current Space in the Vector
-		 *
-		 * @return an integer representing the currentSpace
-		 */
-        int getSize() const;
-        /**
-		 * @brief  Copy Constructor
-		 * @param other A constant Vector where we copy the data from
-		 *
-		 * @return A Vector Constructor
-		 */
-         Vector(const Vector& other);
-                /**
-		 * @brief  Copy Assignment Operator
-		 * @param other A constant Vector where we copy the data from
-		 *
-		 * @return A new Vector with a copied data from the other Vector
-		 */
-        Vector<T>& operator=(const Vector<T>& other);
+public:
+    Vector();
+    ~Vector();
+    /**
+     * @brief Add Data At the end of the Array
+     * @param data = Data being added at the end
+     *
+     *
+     *
+     * @return void
+     */
+    void append(const T& data);
+    /**
+     * @brief Turns [] into like a Raw Array's []
+     * @param index = index of an array
+     *
+     *
+     *
+     * @return returns a Template Object.
+     */
+    T& operator[](int index);
+    /**
+     * @brief Turns [] into like a Raw Array's []
+     * @param index = index of an array
+     *
+     *
+     *
+     * @return returns a Template Object.
+     */
+    const  T& operator[](int index) const;
+    /**
+     * @brief  Getter for the Current Space in the Vector
+     *
+     * @return an integer representing the currentSpace
+     */
+    int getSize() const;
+    /**
+     * @brief  Copy Constructor
+     * @param other A constant Vector where we copy the data from
+     *
+     * @return A Vector Constructor
+     */
+    Vector(const Vector& other);
+    /**
+    * @brief  Copy Assignment Operator
+    	 * @param other A constant Vector where we copy the data from
+    	 *
+    	 * @return A new Vector with a copied data from the other Vector
+    	 */
+    Vector<T>& operator=(const Vector<T>& other);
 
 
 
-	private:
-        std::vector<T> arrayVar;
+private:
+    std::vector<T> arrayVar;
 
-		// fill in ..
+    // fill in ..
 };  // end of interface/declaration of the template class
 
 //IMPLEMENTATION-------------------------------------------------
@@ -86,7 +94,7 @@ Vector<T>::Vector()
 template <class T>
 Vector<T>::~Vector()
 {
-    //Empty? Ask about this ^^
+    //Empty because std::vector will handle it
 }
 
 template <class T>
@@ -120,7 +128,7 @@ const T& Vector<T>::operator[](int index) const
 template <class T>
 int Vector<T>::getSize() const
 {
- arrayVar.size();
+    arrayVar.size();
 }
 
 template <class T>

@@ -16,7 +16,7 @@
  *
  * @bug None
  */
- //----------------------------------------------------------------------
+//----------------------------------------------------------------------
 
 /**
  * @brief  Calculates the Mean With Only Positive Numbers
@@ -39,7 +39,21 @@ float findPositiveMean(const Vector<float> &dataArray);
  * @return A float representing the Standard Deviation.
  */
 float findPositiveStandardDeviation(const Vector<float> &dataArray, float mean);
+/**
+ * @brief  Calculates the sample Pearson Correlation Coefficient of two Vectors
+ * @param vecOne the first Vector
+ * @param vecTwo the second Vector
+ *
+ * @return a float representing the correlation between vecOne and vecTwo
+ */
 float calculateSPCC(Vector<float> &vecOne, Vector<float> &vecTwo);
+/**
+ * @brief calculates the Mean Absolute Deviation
+ * @param dataArray The Array that the function will get all the numbers from
+ * @param mean the mean of the Array
+ *
+ * @return A float representing the MAD
+ */
 float calculateMAD(Vector<float> &dataArray, float mean);
 
 

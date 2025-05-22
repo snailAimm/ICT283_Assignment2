@@ -8,22 +8,24 @@ float radiationKiloWatSum(const Vector<float> &solarRadiationVec)
     {
         for(int i = 0; i < solarRadiationVec.getSize(); i++)
         {
-            currentSolarRadiation += solarRadiationVec[i];
-            currentSolarRadiation /= 6000;
-            sum+=currentSolarRadiation;
+            if(solarRadiationVec[i] >= 100)
+            {
+                currentSolarRadiation += solarRadiationVec[i];
+                currentSolarRadiation /= 6000;
+                sum+=currentSolarRadiation;
+            }
         }
     }
     else
     {
         return -1;
     }
-
     return sum;
 
 }
 
 
-void filterVecByYearMonth(int year, int month, Vector<float> &floatVec, Map<int, WeatherLogType> &weatherMap, int menu)
+void filterMapByYearMonth(int year, int month, Vector<float> &floatVec, Map<int, WeatherLogType> &weatherMap, int menu)
 {
     if(weatherMap.Search(year))
     {
@@ -37,13 +39,20 @@ void filterVecByYearMonth(int year, int month, Vector<float> &floatVec, Map<int,
                     storeToFloatVector(floatVec, weatherMap[year][i].speed);
                     break;
                 case SOLAR_RADIATION:
-                   // if(weatherMap[year][i].solarRadiation > 100)
+                   if(weatherMap[year][i].solarRadiation > 100)
+                   {
+                     storeToFloatVector(floatVec, weatherMap[year][i].solarRadiation);
+                   }
                    // { //Removes Night, and Also was in the Instructions.
-                    storeToFloatVector(floatVec, weatherMap[year][i].solarRadiation);
+
                     //}
                     break;
                 case TEMPERATURE:
+                    if(weatherMap[year][i].solarRadiation > 100)
+                   {
                     storeToFloatVector(floatVec, weatherMap[year][i].temperature);
+                   }
+
                     break;
                 }
 
@@ -56,10 +65,36 @@ void filterVecByYearMonth(int year, int month, Vector<float> &floatVec, Map<int,
 float processTotalSolarRadiation(int year, int month, Vector<float> &dataVec, Map<int, WeatherLogType> &weatherMap)
 {
     float totalSolarRadiationKiloWat = 0;
-    filterVecByYearMonth(year, month, dataVec, weatherMap, SOLAR_RADIATION);
+    filterMapByYearMonth(year, month, dataVec, weatherMap, SOLAR_RADIATION);
     totalSolarRadiationKiloWat = radiationKiloWatSum(dataVec);
     return totalSolarRadiationKiloWat;
 }
+
+void sPCCDataFiltering(int year, int month, Vector<float> &floatVec, Map<int, WeatherLogType> &weatherMap, int menu)
+{
+    if(weatherMap.Search(year))
+    {
+        for(int i = 0; i < weatherMap[year].getSize(); i++)
+        {
+            if(month == weatherMap[year][i].d.getMonth() && weatherMap[year][i].solarRadiation > 100)
+            {
+                switch(menu)
+                {
+                    case SPEED:
+                        storeToFloatVector(floatVec, weatherMap[year][i].speed);
+                        break;
+                    case SOLAR_RADIATION:
+                        storeToFloatVector(floatVec, weatherMap[year][i].solarRadiation);
+                        break;
+                    case TEMPERATURE:
+                        storeToFloatVector(floatVec, weatherMap[year][i].temperature);
+                        break;
+                }
+            }
+        }
+    }
+}
+
 
 
 

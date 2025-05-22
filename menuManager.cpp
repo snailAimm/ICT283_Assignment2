@@ -1,16 +1,18 @@
 #include "menuManager.h"
 #include <iomanip>
-void mainMenu(Map<int, WeatherLogType> &weatherMap, Vector<int> yearVec, const std::string inputFileLocation)
+void mainMenu(Map<int, WeatherLogType> &weatherMap, BST<int> &yearBST, const std::string inputFileLocation)
 {
-    Vector<std::string> dataFiles;
+    BST<std::string> dataFilesBST;
     std::string fileName = "";
     int userInput, userYear, userMonth;
     bool isLooping = true;
     SensorColumnInfo sCI;
+    bstCollector<int> yearCollector;
     //------------------------------------------------------
-    readDataSources(inputFileLocation, dataFiles);
-    if(dataEngine(weatherMap, dataFiles, yearVec))
+    readDataSources(inputFileLocation, dataFilesBST);
+    if(dataEngine(weatherMap, dataFilesBST, yearBST))
     {
+        yearBST.InOrderTraversal(bstCollector<int>::funcPtr);
         while(isLooping)
         {
         printMenu();
@@ -33,7 +35,7 @@ void mainMenu(Map<int, WeatherLogType> &weatherMap, Vector<int> yearVec, const s
         case 3:
             std::cout << "Enter a Month: ";
             userMonth = validateUserInput();
-            printMonthSPCC(weatherMap, userMonth, yearVec);
+            printMonthSPCC(weatherMap, userMonth, yearCollector);
             break;
         case 4:
             std::cout << "Enter a Year: ";
@@ -52,7 +54,7 @@ void printYearMonthWindSpeed(Map<int, WeatherLogType> &weatherMap, int userYear,
 { //Average wind speed, and sample Standard Deviation, given in a month and year. print Screen
     Vector<float> speedVec;
     float mean = 0, sd = 0;
-    filterVecByYearMonth(userYear, userMonth, speedVec, weatherMap, SPEED);
+    filterMapByYearMonth(userYear, userMonth, speedVec, weatherMap, SPEED);
     mean = findPositiveMean(speedVec);
     sd = findPositiveStandardDeviation(speedVec, mean);
     std::cout << "Wind Speed Data For " << '\n' << turnMonthIntToWord(userMonth) << " " << userYear << ":" << '\n';
@@ -69,7 +71,7 @@ void printMonthlyAirTemperature(Map<int, WeatherLogType> &weatherMap, int userYe
     std::cout << "Ambient Air Temperature (Celsius) For " << userYear << '\n';
     for(int month  = 1; month <= totalMonths; month++)
     {
-        filterVecByYearMonth(userYear, month, airTempVec, weatherMap, TEMPERATURE);
+        filterMapByYearMonth(userYear, month, airTempVec, weatherMap, TEMPERATURE);
         mean = findPositiveMean(airTempVec);
         sd = findPositiveStandardDeviation(airTempVec, mean);
         std::cout << std::left << std::setw(10) << turnMonthIntToWord(month);
@@ -78,7 +80,7 @@ void printMonthlyAirTemperature(Map<int, WeatherLogType> &weatherMap, int userYe
     }
 }
 
-void  printMonthSPCC(Map<int, WeatherLogType> &weatherMap, int userMonth, Vector<int> &yearVec)
+void  printMonthSPCC(Map<int, WeatherLogType> &weatherMap, int userMonth, bstCollector<int> &yearCollector)
 { //yearVec is here so I can grab each month lol
     if(userMonth > 12 || userMonth < 1)
     {
@@ -87,20 +89,20 @@ void  printMonthSPCC(Map<int, WeatherLogType> &weatherMap, int userMonth, Vector
     }
     Vector<float> ambientTempVec, solarRadiationVec, windSpeedVec;
     float rWindSpeed_AmbientTemp, rWindSpeed_SolarRadiation, rAmbientTemp_SolarRadiation;
-    for(int i = 0; i < yearVec.getSize(); i++)
+    for(int i = 0; i < yearCollector.getSize(); i++)
     {
-        filterVecByYearMonth(yearVec[i], userMonth, windSpeedVec, weatherMap, SPEED);
-        filterVecByYearMonth(yearVec[i], userMonth, ambientTempVec, weatherMap, TEMPERATURE);
-        filterVecByYearMonth(yearVec[i], userMonth, solarRadiationVec, weatherMap, SOLAR_RADIATION);
+        sPCCDataFiltering(yearCollector[i], userMonth, windSpeedVec, weatherMap, SPEED);
+        sPCCDataFiltering(yearCollector[i], userMonth, ambientTempVec, weatherMap, TEMPERATURE);
+        sPCCDataFiltering(yearCollector[i], userMonth, solarRadiationVec, weatherMap, SOLAR_RADIATION);
     }
     rWindSpeed_AmbientTemp = calculateSPCC(windSpeedVec, ambientTempVec);
     rWindSpeed_SolarRadiation = calculateSPCC(windSpeedVec, solarRadiationVec);
     rAmbientTemp_SolarRadiation = calculateSPCC(ambientTempVec, solarRadiationVec);
 
     std::cout << "Sample Pearson Correlation Coefficient: " << turnMonthIntToWord(userMonth)<<'\n';
-    std::cout << rWindSpeed_AmbientTemp <<'\n';
-    std::cout << rWindSpeed_SolarRadiation <<'\n';
-    std::cout << rAmbientTemp_SolarRadiation<<'\n';
+    std::cout <<"S_T  "<< rWindSpeed_AmbientTemp <<'\n';
+    std::cout <<"S_SR "<< rWindSpeed_SolarRadiation <<'\n';
+    std::cout <<"T_SR "<< rAmbientTemp_SolarRadiation<<'\n';
 
 }
 
@@ -115,8 +117,8 @@ void fileFullWeatherDataOutput(Map<int, WeatherLogType> &weatherMap, int userYea
     for(int month  = 1; month <= totalMonths; month++)
     {
         Vector<float> solarRadiationVec, windSpeedVec, airTempVec;;
-        filterVecByYearMonth(userYear, month, windSpeedVec, weatherMap, SPEED);
-        filterVecByYearMonth(userYear, month, airTempVec, weatherMap, TEMPERATURE);
+        filterMapByYearMonth(userYear, month, windSpeedVec, weatherMap, SPEED);
+        filterMapByYearMonth(userYear, month, airTempVec, weatherMap, TEMPERATURE);
 
         speedMean = findPositiveMean(windSpeedVec);
         speedSD = findPositiveStandardDeviation(windSpeedVec, speedMean);

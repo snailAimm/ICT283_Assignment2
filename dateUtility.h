@@ -15,7 +15,7 @@
  *
  * @bug None
  */
- //----------------------------------------------------------------------
+//----------------------------------------------------------------------
 /**
     * @brief  Turns Numbers 1-12 to their restrospective Months
     * @param numInput The number that will turn into a word

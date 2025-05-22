@@ -3,17 +3,19 @@
 #include <fstream>
 #include <sstream>
 
-bool dataEngine(Map<int, WeatherLogType> &weatherMap, const Vector<std::string> &dataFiles, Vector<int> &yearVec)
+bool dataEngine(Map<int, WeatherLogType> &weatherMap, const BST<std::string> &dataFiles, BST<int> &yearBST)
 {
+    bstCollector<std::string> collector;
+    dataFiles.InOrderTraversal(bstCollector<std::string>::funcPtr);
     SensorColumnInfo sCI;
-    for(int i = 0; i < dataFiles.getSize(); i++)
+    for(int i = 0; i < collector.getSize(); i++)
     {
-        mainDataLoader(weatherMap, dataFiles[i], sCI, yearVec);
+        mainDataLoader(weatherMap, collector[i], sCI, yearBST);
     }
     //mainDataLoader(weatherVec, [Placeholder], sCI);
 }
 
-bool mainDataLoader(Map<int, WeatherLogType> &weatherMap, const std::string &dataFileLocation, SensorColumnInfo &sCI, Vector<int> &yearVec) //This is for Each File.
+bool mainDataLoader(Map<int, WeatherLogType> &weatherMap, const std::string &dataFileLocation, SensorColumnInfo &sCI, BST<int> &yearBST) //This is for Each File.
 {
     std::ifstream dataFile(dataFileLocation);
 
@@ -40,14 +42,14 @@ bool mainDataLoader(Map<int, WeatherLogType> &weatherMap, const std::string &dat
             {
                 parseHandler(tokenisedLine, weatherEntry, sCI);
                 addToMap(weatherEntry, weatherMap);
-                addToYearVec(yearVec, weatherEntry);
+                addToYearBST(yearBST, weatherEntry);
             }
         }
     }
     return true;
 }
 
-void readDataSources(const std::string &dataSourceLocation, Vector<std::string> &dataFilePaths)
+void readDataSources(const std::string &dataSourceLocation, BST<std::string> &dataFilePaths)
 {
     std::string dataFileLocation = "";
     std::ifstream dataSourceFile(dataSourceLocation);
@@ -58,7 +60,7 @@ void readDataSources(const std::string &dataSourceLocation, Vector<std::string> 
     while(std::getline(dataSourceFile, dataFileLocation))
     {
         dataFileLocation = "data/" + dataFileLocation;
-        dataFilePaths.append(dataFileLocation);
+        dataFilePaths.Insert(dataFileLocation);
     }
 }
 
@@ -103,10 +105,10 @@ void assignLocations(SensorColumnInfo &sCI, const std::string &line)
 
 void lineSegmentation(const std::string &line, Vector<std::string> &stringVec)
 {
-    std::stringstream stream(line);
+    std::stringstream rawData(line);
     std::string segment;
 
-    while(getline(stream, segment, ','))
+    while(getline(rawData, segment, ','))
     {
         placeholderLocator(segment);
         stringVec.append(segment);
@@ -149,27 +151,10 @@ void addToMap(WeatherLogEntry &entry, Map<int, WeatherLogType> &weatherMap)
     int currentYear = entry.d.getYear();
     weatherMap[currentYear].append(entry);
 }
-void addToYearVec(Vector<int> &yearVec, WeatherLogEntry &entry)
+void addToYearBST(BST<int> &yearBST, WeatherLogEntry &entry)
 {
     int currentYear = entry.d.getYear();
-    bool newYear = true;
-    if(yearVec.getSize() < 1)
-    {
-        yearVec.append(currentYear);
-        return;
-    }
-    for(int i = 0; i < yearVec.getSize(); i++)
-    {
-        if(yearVec[i] == currentYear)
-        {
-            newYear = false;
-            break;
-        }
-    }
-    if(newYear)
-    {
-        yearVec.append(currentYear);
-    }
+    yearBST.Insert(currentYear);
 }
 
 

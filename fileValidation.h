@@ -1,5 +1,20 @@
 #ifndef FILEVALIDATION_H_INCLUDED
 #define FILEVALIDATION_H_INCLUDED
+/**
+ *@file fileValidation.h
+ *@brief File that holds functions that helps validation
+ *
+ *
+ * @author Ken Giron
+ * @date 5/16/2025
+ * @version 01
+ *
+ *
+ * @todo [NA]
+ *
+ * @bug None
+ */
+//------------------------------------------
 #include"fileHandler.h"
 /**
  * @brief Checks if the String/Line contains the essential char to proceed
